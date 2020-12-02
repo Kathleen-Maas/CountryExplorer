@@ -13,6 +13,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.Coil
+import coil.ImageLoader
+import coil.decode.SvgDecoder
 import com.example.countryexplorer.databinding.FragmentMainBinding
 import kotlinx.coroutines.Job
 import viewBinding
@@ -23,8 +26,11 @@ import java.util.concurrent.ThreadLocalRandom.current
  */
 class MainScreenFragment : Fragment() {
 
-    private val myVamp: MainScreenVamp by viewModels<MainScreenVamp> { MyViewModelFactory(RepositoryImp(ApiProvider.createService(ApiService::class.java))) }
-    private val ui: FragmentMainBinding by viewBinding(FragmentMainBinding::bind)
+    private val database = AppDatabase.getDatabase(requireContext())
+    private val dao = database.countryDao()
+    private val imp = RepositoryImp(ApiProvider.createService(ApiService::class.java))
+    private val myVamp: MainScreenVamp by viewModels<MainScreenVamp> { MyViewModelFactory(imp) }
+    private val ui: FragmentMainBinding by viewBinding { FragmentMainBinding.bind(it) }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +43,15 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("Debug", "Hi")
+
+        //making image loader
+        val imageLoader = ImageLoader.Builder(requireContext())
+            .componentRegistry {
+                add(SvgDecoder(requireContext()))
+            }
+            .build()
+
+        Coil.setImageLoader(imageLoader)
 
         ui.refreshButton.setOnClickListener(){
             myVamp.onRefreshTapped()
