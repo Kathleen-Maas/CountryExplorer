@@ -7,8 +7,10 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
 

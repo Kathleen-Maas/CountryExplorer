@@ -6,3 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 class MyViewModelFactory(private val repository: Repository): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = MainScreenVamp(repository) as T
 }
+
+class MyViewModelFactoryDetail(private val repository: Repository): ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = CountryVamp(repository) as T
+}
